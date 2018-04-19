@@ -2,11 +2,10 @@
 
 import time
 import cv2
-from kafka import SimpleProducer, KafkaClient
+from kafka import KafkaProducer, KafkaClient
 
 # connect to Kafka
-kafka = KafkaClient('localhost:9092')
-producer = SimpleProducer(kafka)
+producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
 # Assign a topic
 topic = 'Python'
@@ -27,7 +26,7 @@ def video_emitter(video):
         # convert the image png
         ret, jpeg = cv2.imencode('.png', image)
         # Convert the image to bytes and send to kafka
-        producer.send_messages(topic, jpeg.tobytes())
+        producer.send(topic, jpeg.tobytes())
         # To reduce CPU usage create sleep time of 0.2 sec
         time.sleep(0.2)
     # clear the capture
@@ -35,4 +34,4 @@ def video_emitter(video):
     print('done emitting')
 
 if __name__ == '__main__':
-    video_emitter(' Concrete\ Problems\ in\ AI\ Safety\ \(Paper\)\ -\ Computerphile.mp4')
+    video_emitter('cais.mp4')
